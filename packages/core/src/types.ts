@@ -1270,6 +1270,13 @@ export abstract class Service {
 export interface IAgentRuntime {
     // Properties
     agentId: UUID;
+    clients: {
+        farcaster?: any;
+        twitter?: any;
+        discord?: any;
+        telegram?: any;
+        [key: string]: any;
+    };
     serverUrl: string;
     databaseAdapter: IDatabaseAdapter;
     token: string | null;
@@ -1296,8 +1303,6 @@ export interface IAgentRuntime {
     services: Map<ServiceType, Service>;
     // any could be EventEmitter
     // but I think the real solution is forthcoming as a base client interface
-    clients: Record<string, any>;
-
     verifiableInferenceAdapter?: IVerifiableInferenceAdapter | null;
 
     initialize(): Promise<void>;

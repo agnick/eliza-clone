@@ -9,12 +9,14 @@ export const DEFAULT_MAX_CAST_LENGTH = 320;
 const DEFAULT_POLL_INTERVAL= 120; // 2 minutes
 const DEFAULT_POST_INTERVAL_MIN = 90; // 1.5 hours
 const DEFAULT_POST_INTERVAL_MAX = 180; // 3 hours
+
 /**
  * This schema defines all required/optional environment settings for Farcaster client
  */
 export const farcasterEnvSchema = z.object({
     FARCASTER_DRY_RUN: z.boolean(),
     FARCASTER_FID: z.number().int().min(1, "Farcaster fid is required"),
+    FARCASTER_TARGET_USERS: z.array(z.string()).default([]),
     MAX_CAST_LENGTH: z.number().int().default(DEFAULT_MAX_CAST_LENGTH),
     FARCASTER_POLL_INTERVAL: z.number().int().default(DEFAULT_POLL_INTERVAL),
     ENABLE_POST: z.boolean(),
@@ -41,6 +43,20 @@ function safeParseInt(
 }
 
 /**
+ * Helper to parse a comma-separated list of Farcaster usernames
+ * (already present in your code).
+ */
+function parseTargetUsers(targetUsersStr?: string | null): string[] {
+    if (!targetUsersStr?.trim()) {
+        return [];
+    }
+    return targetUsersStr
+        .split(",")
+        .map((user) => user.trim())
+        .filter(Boolean);
+}
+
+/**
  * Validates or constructs a FarcasterConfig object using zod,
  * taking values from the IAgentRuntime or process.env as needed.
  */
@@ -60,6 +76,11 @@ export async function validateFarcasterConfig(
                 runtime.getSetting("FARCASTER_FID") ||
                     process.env.FARCASTER_FID,
                 0
+            ),
+
+            FARCASTER_TARGET_USERS: parseTargetUsers(
+                runtime.getSetting("FARCASTER_TARGET_USERS") || 
+                    process.env.FARCASTER_TARGET_USERS
             ),
 
             MAX_CAST_LENGTH: safeParseInt(

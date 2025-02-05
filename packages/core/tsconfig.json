@@ -23,5 +23,5 @@
         "customConditions": ["@elizaos/source"]
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules", "dist", "src/**/*.d.ts", "types/**/*.test.ts"]
+    "exclude": ["node_modules", "dist", "src/**/*.d.ts", "src/types/**/*.test.ts"]
 }

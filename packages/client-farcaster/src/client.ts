@@ -175,6 +175,7 @@ export class FarcasterClient {
             return this.cache.get(`farcaster/profile/${fid}`) as Profile;
         }
 
+        // Fetch our user profile
         const result = await this.neynar.fetchBulkUsers({ fids: [fid] });
         if (!result.users || result.users.length < 1) {
             elizaLogger.error("Error fetching user by fid");

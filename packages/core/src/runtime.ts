@@ -170,7 +170,7 @@ export class AgentRuntime implements IAgentRuntime {
     services: Map<ServiceType, Service> = new Map();
     memoryManagers: Map<string, IMemoryManager> = new Map();
     cacheManager: ICacheManager;
-    clients: Record<string, any>;
+    public clients: { [key: string]: any } = {};
 
     verifiableInferenceAdapter?: IVerifiableInferenceAdapter;
 
